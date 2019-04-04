@@ -9,7 +9,8 @@ j.connectToDatabase()
 myQ = '''
 getCallsTo('.*printf.*').ithArguments('1')
 .sideEffect{ param = it.code }
-.match{ it.type != "const String" }.statements()
+.match{ it.type != "const String" }
+.locations()
  '''
 
 res = j.runGremlinQuery(myQ)
