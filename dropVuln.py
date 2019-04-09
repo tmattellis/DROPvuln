@@ -13,7 +13,7 @@ def runQuery(query, type="Placeholder"):
 def main():
     j = JoernSteps()
 
-    j.setGraphDbURL("http://localhost:7474")
+    j.setGraphDbURL("http://localhost:7474/db/data")
 
     j.connectToDatabase()
 
