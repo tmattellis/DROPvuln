@@ -2,7 +2,7 @@ from joern.all import JoernSteps
 
 
 
-def runQuery(query, type="Placeholder"):
+def runQuery(query, type, j):
 
     results = j.runGremlinQuery(query)
 
@@ -97,8 +97,8 @@ def main():
                              '''
     }
 
-    for myType, query in queries:
-        runQuery(query, myType)
+    for key, value in queries.items():
+        runQuery(value, key,j)
 
     # didn't copy in divide by zero given that it was written differently. 
 
