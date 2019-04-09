@@ -97,8 +97,8 @@ def main():
                              '''
     }
 
-    for query, type in queries:
-        runQuery(query)
+    for myType, query in queries:
+        runQuery(query, myType)
 
     # didn't copy in divide by zero given that it was written differently. 
 
