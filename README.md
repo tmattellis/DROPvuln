@@ -1,5 +1,5 @@
 # DROPvuln
-DROPvuln is a tool used to perform program vulnerability analysis with code property graphs
+DROPvuln is a work-in-progress tool (including the name) used to perform program vulnerability analysis with code property graphs
 
 ## Requirements
 To install the requirements, begin by cloning this repository. Additionally, we recommend using an VM running Ubuntu 14.04 for experimental tests on this tool. Once you've set up the virtual machine, you should ensure that Java 1.7 or 1.8 is installed - these tools will not run on newer versions!
