@@ -8,7 +8,8 @@ j.setGraphDbURL('http://localhost:7474/db/data')
 j.connectToDatabase()
 
 res = j.runGremlinQuery("g.V()")
-
+for r in res:
+    print r
 
 index = [res.index(r) for r in res if r.properties['operator'] == '/']
 
