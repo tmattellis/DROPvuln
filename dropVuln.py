@@ -17,8 +17,9 @@ def main():
 
     j.connectToDatabase()
 
-    queries = {
-    "Buffer Overflow 1" : '''
+    queryNames = { "Buffer Overflow 1", "Buffer Overflow 2", "Code Injection", "Insecure Arguments", "Integer Overflow", 
+                  "Zero-Byte Allocation", ""}
+    queries = {           '''
                             getFunctionASTsByName('*_write*')
                             .getArguments('(copy_from_user OR memcpy)', '2')
                             .sideEffect{ paramName = 'c(ou)?nt';}
@@ -34,7 +35,7 @@ def main():
                             .locations()
                           ''',
 
-    "Buffer Overflow 2" : '''
+                          '''
                             getArguments('(copy_from_user OR memcpy)', '2')
                             .filter{ !it.argToCall().toList()[0].code.matches('.*(sizeof|min).*') }
                             .sideEffect{ argument = it.code; } 
@@ -51,7 +52,7 @@ def main():
                             .locations()
                           ''',
 
-    "Code Injection" : '''
+                        '''
                             getArguments('recv', '1')
                             .sideEffect{ paramName = it.code;}
                             .filter{ it.code.matches(paramName) }
@@ -65,14 +66,14 @@ def main():
                             .locations()
                        ''',
 
-    "Insecure Arguments" : '''
+                        '''
                             getCallsTo('.*printf.*').ithArguments('1')
                             .sideEffect{ param = it.code }
                             .match{ it.type != "const String" }
                             .locations()
                            ''',
 
-    "Integer Overflow" : '''
+                        '''
                             getCallsTo('malloc').ithArguments('0')
                             .sideEffect{ param = it.code }
                             .match{ it.type == "AdditiveExpression" }.statements()
@@ -83,7 +84,7 @@ def main():
                             .locations()
                          ''',
 
-    "Zero-Byte Allocation" : '''
+                            '''
                             getArguments('.*alloc.*', '0')
                             .sideEffect{ paramName = it.code;}
                             .filter{ it.code.matches(paramName) }
@@ -97,8 +98,8 @@ def main():
                              '''
     }
 
-    for key, value in queries.items():
-        runQuery(value, key,j)
+    for i in range(0, len(queries)):
+        runQuery(queries[i], queryNames[i],j)
 
     # didn't copy in divide by zero given that it was written differently. 
 
