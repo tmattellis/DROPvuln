@@ -3,16 +3,14 @@
 int main()
 
 {
-	    int a = INT_MAX;
-	    str = (char *)malloc(a+1)
-	    strcpy(str, "tutorialspoint");
-   	    printf("String = %s,  Address = %u\n", str, str);
-	    free(str);
-	
-		
+   // POSITIVE_TESTS:
+        void *bad_ptr = malloc(len + 8);
+        memcpy(bad_ptr, spooky_buf, len + 7);
 
-            printf("%f",c);
+   // NEGATIVE_TESTS:
+        void *other_bad_ptr = malloc(len + 1);
+        memcpy(other_bad_ptr, spooky_buf, len);
 
-            return 0;
+     return 0;
 
 }

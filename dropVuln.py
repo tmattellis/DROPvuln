@@ -5,10 +5,13 @@ from joern.all import JoernSteps
 def runQuery(query, type, j):
 
     results = j.runGremlinQuery(query)
+    counter=0    
 
     for r in results:
-        print("vuln of type {type} found here \n".format(type))
+	counter = counter+1
+        print("vuln of type " + type + " found here 	total number: " + str(counter))
         print(r)
+	print("\n\n")
 
 def main():
     j = JoernSteps()
@@ -17,9 +20,9 @@ def main():
 
     j.connectToDatabase()
 
-    queryNames = { "Buffer Overflow 1", "Buffer Overflow 2", "Code Injection", "Insecure Arguments", "Integer Overflow", 
-                  "Zero-Byte Allocation", ""}
-    queries = {           '''
+    queryNames = [ "Buffer Overflow 1", "Buffer Overflow 2", "Code Injection", "Insecure Arguments", "Integer Overflow", 
+                  "Zero-Byte Allocation"]
+    queries = [           '''
                             getFunctionASTsByName('*_write*')
                             .getArguments('(copy_from_user OR memcpy)', '2')
                             .sideEffect{ paramName = 'c(ou)?nt';}
@@ -96,7 +99,7 @@ def main():
                             )
                             .locations()
                              '''
-    }
+    ]
 
     for i in range(0, len(queries)):
         runQuery(queries[i], queryNames[i],j)
