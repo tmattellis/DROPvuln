@@ -31,8 +31,8 @@ getCallsTo("malloc")
 .locations()
 
 getCallsTo("realloc")
-.taintedArgs([ANY_SOURCE, arg0Source])
-.unchecked([ANY_SOURCE, arg0Sanitizer])
+.taintedArgs([arg0Source])
+.unchecked([arg0Sanitizer])
 .locations()
 '''
 

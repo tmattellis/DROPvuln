@@ -54,8 +54,9 @@ def setupTool():
     cmd(["sudo", "python2", "setup.py", "install"])
 
 def importCode(codepath):
-   # if(os.path.exists("~/DROPvuln/requirements/joern-0.3.1/.joernIndex") == True):
-   #     cmd(["rm", "-r", "requirements/joern-0.3.1/.joernIndex"])
+    if(os.path.exists("~/DROPvuln/requirements/joern-0.3.1/.joernIndex") == True):
+        cmd(["rm", "-r", "requirements/joern-0.3.1/.joernIndex"])
+	cmd(["ant","-f", "requirements/joern-0.3.1"])
 
     cmd(["java", "-jar", "requirements/joern-0.3.1/bin/joern.jar", codepath])
 
@@ -66,7 +67,7 @@ def runTool(traversal):
 
 def main(): 
 
-    myparse = argp.ArgumentParser(description='Runs the HPV EM tool')
+    myparse = argp.ArgumentParser(description='Runs the DROP Vuln tool')
 
     myparse.add_argument("function", help="Select which function to use in the tool", default="run")
     myparse.add_argument("-c", help="The (complete) path to the code to be imported", default="testCode")
