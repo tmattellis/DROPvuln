@@ -7,18 +7,13 @@ j.setGraphDbURL('http://localhost:7474/db/data')
 j.connectToDatabase()
 
 myQ = '''
-getArguments('recv', '1')
-.sideEffect{ paramName = it.code;}
-.filter{ it.code.matches(paramName) }
-.filter{ it.code.matches('system') }
-.unsanitized(
-	{ it._().or(
-	  _().isCheck('.*' + paramName + '.*'),
-	  _().codeContains('.*;.*')
-	  )}
-)
-.locations()
- '''
+arg1Source =('.*recv.*');
+arg1Sanitizer = {it, symbol -> conditionMatches(".*;.*" ,symbol)};
+
+getCallsTo("system")
+.taintedArgs([arg1Source])
+.unchecked([arg1Sanitizer])
+'''
 
 res = j.runGremlinQuery(myQ)
 

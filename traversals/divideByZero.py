@@ -31,17 +31,12 @@ for f in final:
 	if p not in parent:
 		parent.append(p)
 
-for p in parent:
-	print(p)
 
-print(len(parent))
 #.statements().in()
-print("------------------------------------------------")
-print(len(child))
+
 
 for c in child:
 	print(c)
-
 
 
 

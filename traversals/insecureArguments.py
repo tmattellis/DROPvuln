@@ -9,6 +9,7 @@ j.connectToDatabase()
 myQ = '''
 getCallsTo('.*printf.*').ithArguments('1')
 .sideEffect{ param = it.code }
+.out("REACHES")
 .match{ it.type != "const String" }
 .locations()
  '''
