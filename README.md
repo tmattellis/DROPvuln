@@ -1,6 +1,21 @@
 # DROPvuln
 DROPvuln is a work-in-progress tool (including the name) used to perform program vulnerability analysis with code property graphs
 
+## Installation
+To install, simply run the command "python tool.py install" - everything will be set up for you!
+
+## Importing
+To import, simply run the command "python tool.py import". You also have the option to import your own code using the -c flag followed by the path to your code directory.
+
+## Running
+To run the DROPvuln traversals, simply run the command "python tool.py run". You also have the option to run your own traversal using the -t flag followed by the path to your script.
+
+
+
+
+
+OLD DOCUMENTATION
+
 ## Requirements
 To install the requirements, begin by cloning this repository. Additionally, we recommend using an VM running Ubuntu 14.04 for experimental tests on this tool. Once you've set up the virtual machine, you should ensure that Java 1.7 or 1.8 is installed - these tools will not run on newer versions!
 
