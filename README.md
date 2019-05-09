@@ -13,8 +13,7 @@ To run the DROPvuln traversals, simply run the command "python tool.py run". You
 
 
 
-
-OLD DOCUMENTATION
+# OLD DOCUMENTATION
 
 ## Requirements
 To install the requirements, begin by cloning this repository. Additionally, we recommend using an VM running Ubuntu 14.04 for experimental tests on this tool. Once you've set up the virtual machine, you should ensure that Java 1.7 or 1.8 is installed - these tools will not run on newer versions!
