@@ -21,7 +21,7 @@ def main():
     j.connectToDatabase()
 
     queryNames = [ "Buffer Overflow 1", "Buffer Overflow 2", "Code Injection", "Insecure Arguments", "Integer Overflow", 
-                  "Zero-Byte Allocation"]
+                  "Zero-Byte Allocation (malloc)", "Zero Byte Allocation (realloc)", "Heartbleed"]
     queries = [           '''
                             getFunctionASTsByName('*_write*')
                             .getArguments('(copy_from_user OR memcpy)', '2')
@@ -56,22 +56,19 @@ def main():
                           ''',
 
                         '''
-                            getArguments('recv', '1')
-                            .sideEffect{ paramName = it.code;}
-                            .filter{ it.code.matches(paramName) }
-                            .filter{ it.code.matches('system') }
-                            .unsanitized(
-                                { it._().or(
-                                  _().isCheck('.*' + paramName + '.*'),
-                                  _().codeContains('.*;.*')
-                                  )}
-                            )
+                            arg1Source =('.*recv.*');
+			    arg1Sanitizer = {it, symbol -> conditionMatches(".*;.*" ,symbol)};
+
+			    getCallsTo("system")
+			    .taintedArgs([arg1Source])
+			    .unchecked([arg1Sanitizer])
                             .locations()
                        ''',
 
                         '''
                             getCallsTo('.*printf.*').ithArguments('1')
                             .sideEffect{ param = it.code }
+			    .out("REACHES")
                             .match{ it.type != "const String" }
                             .locations()
                            ''',
@@ -88,17 +85,42 @@ def main():
                          ''',
 
                             '''
-                            getArguments('.*alloc.*', '0')
-                            .sideEffect{ paramName = it.code;}
-                            .filter{ it.code.matches(paramName) }
-                            .unsanitized(
-                                { it._().or(
-                                  _().isCheck('.*' + paramName + '.*'),
-                                  _().codeContains('.*0.*')
-                                  )}
-                            )
-                            .locations()
-                             '''
+			    getArguments('.*alloc.*', '0')
+			    .sideEffect{ paramName = it.code;}
+			    .filter{ it.code.matches(paramName) }
+			    .unsanitized(
+        			{ it._().or(
+          			_().isCheck('.*' + paramName + '.*'),
+          			_().codeContains('.*0.*')
+          			)}
+			     )
+			    .locations()
+ 			   ''',
+
+			   '''
+			    arg0Source = sourceMatches('.*recv.*')
+			    arg0Sanitizer = { it, symbol -> conditionMatches(".*%d (==| !=) 0.*",symbol)};
+
+			    getCallsTo("malloc")
+			    .taintedArgs([arg0Source])
+			    .unchecked([arg0Sanitizer])
+			    .locations()
+
+			    getCallsTo("realloc")
+			    .taintedArgs([ANY_SOURCE, arg0Source])
+			    .unchecked([ANY_SOURCE, arg0Sanitizer])
+			    .locations()
+                             ''',
+			  '''
+			    arg3Source = sourceMatches('.*n2s.*');
+			    arg2Sanitizer = { it, symbol -> conditionMatches(".*%s (==| !=) NULL.*", symbol)};
+			    arg3Sanitizer = { it, symbol -> conditionMatches(".*%s.* +(d+).*", symbol)};
+
+			    getCallsTo("memcpy")
+			    .taintedArgs([ANY_SOURCE,ANY_SOURCE,arg3Source])
+			    .unchecked([ANY_SOURCE, arg2Sanitizer, arg3Sanitizer])
+			    .locations()
+			  '''
     ]
 
     for i in range(0, len(queries)):

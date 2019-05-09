@@ -13,6 +13,7 @@ arg1Sanitizer = {it, symbol -> conditionMatches(".*;.*" ,symbol)};
 getCallsTo("system")
 .taintedArgs([arg1Source])
 .unchecked([arg1Sanitizer])
+.locations()
 '''
 
 res = j.runGremlinQuery(myQ)

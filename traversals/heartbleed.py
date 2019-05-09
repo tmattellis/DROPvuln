@@ -14,6 +14,7 @@ arg3Sanitizer = { it, symbol -> conditionMatches(".*%s.* +(d+).*", symbol)};
 getCallsTo("memcpy")
 .taintedArgs([ANY_SOURCE,ANY_SOURCE,arg3Source])
 .unchecked([ANY_SOURCE, arg2Sanitizer, arg3Sanitizer])
+.locations()
  '''
 
 res = j.runGremlinQuery(myQ)

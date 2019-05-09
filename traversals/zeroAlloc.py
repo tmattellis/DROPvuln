@@ -18,6 +18,8 @@ getArguments('.*alloc.*', '0')
 )
 .locations()
  '''
+res_0 = j.runGremlinQuery(myQ)
+for r in res_0: print(r)
 
 myQ = '''
 arg0Source = sourceMatches('.*recv.*')
@@ -26,10 +28,12 @@ arg0Sanitizer = { it, symbol -> conditionMatches(".*%d (==| !=) 0.*",symbol)};
 getCallsTo("malloc")
 .taintedArgs([arg0Source])
 .unchecked([arg0Sanitizer])
+.locations()
 
 getCallsTo("realloc")
 .taintedArgs([ANY_SOURCE, arg0Source])
 .unchecked([ANY_SOURCE, arg0Sanitizer])
+.locations()
 '''
 
 res = j.runGremlinQuery(myQ)
